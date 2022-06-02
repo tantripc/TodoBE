@@ -12,7 +12,7 @@ namespace TodoBE.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        public static List<Product> ProductList = new List<Product>();
+        public static List<ProductModel> ProductList = new List<ProductModel>();
 
         [HttpGet]
         public IActionResult GetAll()
@@ -39,7 +39,7 @@ namespace TodoBE.Controllers
         [HttpPost]
         public IActionResult Create(ProductVM productVM)
         {
-            var product = new Product()
+            var product = new ProductModel()
             {
                 ProductID = Guid.NewGuid(),
                 Name = productVM.Name,
@@ -54,7 +54,7 @@ namespace TodoBE.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, Product product)
+        public IActionResult Update(string id, ProductModel product)
         {
             try
             {
