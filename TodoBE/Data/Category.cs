@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TodoBE.Data
 {
-    [Table("Category")]
+    [Table("Categories")]
     public class Category
     {
         [Key]

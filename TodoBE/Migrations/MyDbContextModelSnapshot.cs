@@ -33,7 +33,7 @@ namespace TodoBE.Migrations
 
                     b.HasKey("CategoryID");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TodoBE.Data.Order", b =>
@@ -43,9 +43,7 @@ namespace TodoBE.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
@@ -64,7 +62,7 @@ namespace TodoBE.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("TodoBE.Data.OrderDetail", b =>
@@ -88,7 +86,7 @@ namespace TodoBE.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TodoBE.Data.Product", b =>
@@ -118,7 +116,7 @@ namespace TodoBE.Migrations
 
                     b.HasIndex("CategoryID");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("TodoBE.Data.OrderDetail", b =>
@@ -126,14 +124,12 @@ namespace TodoBE.Migrations
                     b.HasOne("TodoBE.Data.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderID")
-                        .HasConstraintName("FK_OrderDetail_Order")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TodoBE.Data.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductID")
-                        .HasConstraintName("FK_OrderDetail_Product")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

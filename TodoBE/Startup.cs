@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TodoBE.Data;
+using TodoBE.Services;
+using TodoBE.Services.Product;
 
 namespace TodoBE
 {
@@ -33,6 +35,10 @@ namespace TodoBE
             {
                 option.UseSqlServer(Configuration.GetConnectionString("MyDB"));
             });
+            
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoBE", Version = "v1" });

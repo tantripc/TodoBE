@@ -19,20 +19,9 @@ namespace TodoBE.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order>(e =>
-            {
-                e.ToTable("Order");
-                e.HasKey(o => o.OrderID);
-                e.Property(o => o.CreateDate).HasDefaultValueSql("getutcdate()");
-
-            });
-
             modelBuilder.Entity<OrderDetail>(e =>
             {
-                e.ToTable("OrderDetail");
                 e.HasKey(o => new { o.OrderID, o.ProductID });
-                e.HasOne(o => o.Order).WithMany(o=>o.OrderDetails).HasForeignKey(o=>o.OrderID).HasConstraintName("FK_OrderDetail_Order");
-                e.HasOne(o => o.Product).WithMany(o=>o.OrderDetails).HasForeignKey(o=>o.ProductID).HasConstraintName("FK_OrderDetail_Product");
             });
         }
     }

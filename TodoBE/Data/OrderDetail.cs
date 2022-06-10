@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace TodoBE.Data
 {
+    [Table("OrderDetails")]
     public class OrderDetail
     {
         public Guid ProductID { get; set; }
@@ -14,7 +16,9 @@ namespace TodoBE.Data
         public byte DiscountPrice { get; set; }
 
         #region Relationship
+        [ForeignKey("ProductID")]
         public Product Product { get; set; }
+        [ForeignKey("OrderID")]
         public Order Order { get; set; }
         #endregion
     }

@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Helper\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

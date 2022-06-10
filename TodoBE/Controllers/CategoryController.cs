@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TodoBE.Data;
 using TodoBE.Models;
+using TodoBE.Services;
 
 namespace TodoBE.Controllers
 {
@@ -13,28 +14,41 @@ namespace TodoBE.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly MyDbContext _context;
+        private readonly ICategoryRepository _repository;
 
-        public CategoryController(MyDbContext context)
+        public CategoryController(ICategoryRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
-            var categories = _context.Categories.ToList();
-            return Ok(categories);
+            try
+            {
+                return Ok(_repository.GetAll());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var category = _context.Categories.SingleOrDefault(c => c.CategoryID == id);
-            if (category == null)
-                return NotFound();
+            try
+            {
+                var category = _repository.Get(id);
+                if (category != null)
+                    return Ok(category);
 
-            return Ok(category);
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost]
@@ -42,17 +56,11 @@ namespace TodoBE.Controllers
         {
             try
             {
-                var category = new Category()
-                {
-                    Name = model.Name
-                };
-                _context.Add(category);
-                _context.SaveChanges();
-                return Ok(category);
+                return Ok(_repository.Add(model));
             }
             catch (Exception)
             {
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -61,18 +69,28 @@ namespace TodoBE.Controllers
         {
             try
             {
-                var category = _context.Categories.SingleOrDefault(c => c.CategoryID.Equals(id));
-                if (category == null)
+                if (id != model.Id)
                     return NotFound();
-
-                category.Name = model.Name;
-                _context.SaveChanges();
-
-                return Ok(category);
+                _repository.Update(model);
+                return NoContent();
             }
             catch (Exception)
             {
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult Remove(int id)
+        {
+            try
+            {
+                _repository.Delete(id);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
